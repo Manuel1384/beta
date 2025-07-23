@@ -1,102 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calvotech - Soluciones Informáticas</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <title>Bingo Web Mejorado</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <header>
-        <div class="logo-container">
-            <img src="logo.jpg" alt="Logo Calvotech" class="logo">
-        </div>
-        <h1>Calvotech 💻</h1>
-        <p>Soporte técnico, desbloqueo de netbooks, instalación de software y más</p>
-    </header>
+  <h1>Bingo Web Mejorado</h1>
 
-    <main>
-        <section class="services">
-            <h2>Servicios de Soporte Técnico</h2>
-            <ul class="service-list">
-                <li onclick="showInfo('desbloqueo')">
-                    <img src="desbloqueo_netbook.jpg" alt="Desbloqueo Netbooks" class="service-img"> 
-                    <span>Desbloqueo Permanente de Netbooks del Gobierno 📊</span>
-                </li>
-                <li onclick="showInfo('instalacion')">
-                    <img src="instalacion_windows.jpg" alt="Instalación de Windows" class="service-img"> 
-                    <span>Instalación de Windows y Office 💼</span>
-                </li>
-                <li onclick="showInfo('mantenimiento')">
-                    <img src="mantenimiento_pc.jpg" alt="Mantenimiento de PC" class="service-img"> 
-                    <span>Mantenimiento de PC 🔧</span>
-                </li>
-                <li onclick="showInfo('drivers')">
-                    <img src="drivers.jpeg" alt="Instalación de Drivers" class="service-img"> 
-                    <span>Instalación de Drivers 📦</span>
-                </li>
-            </ul>
-        </section>
+  <div class="controls">
+    <input id="nombreCliente" placeholder="Nombre del cliente" />
+  </div>
 
-        <section class="contact">
-            <h2>Contáctanos</h2>
-            <form action="send_email.php" method="POST">
-                <div class="form-group">
-                    <label for="name">Nombre:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
+  <div class="cartones-container">
+    <textarea id="cartonA" placeholder="Cartón A (15 números)"></textarea>
+    <textarea id="cartonB" placeholder="Cartón B (15 números)"></textarea>
+    <textarea id="cartonC" placeholder="Cartón C (15 números)"></textarea>
+    <textarea id="cartonD" placeholder="Cartón D (15 números)"></textarea>
+    <textarea id="cartonE" placeholder="Cartón E (15 números)"></textarea>
+    <textarea id="cartonF" placeholder="Cartón F (15 números)"></textarea>
+  </div>
 
-                <div class="form-group">
-                    <label for="email">Correo Electrónico:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
+  <!-- Botón para agregar cartones -->
+  <div class="controls">
+    <button onclick="agregarCartones()">➕ Agregar cartones</button>
+  </div>
 
-                <div class="form-group">
-                    <label for="message">Mensaje:</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
+  <div class="controls">
+    <input id="numeroCantado" placeholder="🔢 Número cantado" type="number" />
+    <button onclick="cantarNumero()">🔊 Cantar número</button>
+    <button id="undoBtn" onclick="undo()">↩️ Deshacer</button>
+    <button onclick="reiniciarJuego()">🔄 Reiniciar juego</button>
+  </div>
 
-                <button type="submit">Enviar Mensaje</button>
-            </form>
-        </section>
+  <div id="ventas"></div>
 
-        <!-- Información emergente -->
-        <div id="info-popup" class="popup" onclick="closeInfo(event)">
-            <div class="popup-content">
-                <span class="popup-close" onclick="closeInfo(event)">&times;</span>
-                <p id="popup-text"></p>
-            </div>
-        </div>
-    </main>
+  <h2>🎟️ Números cantados:</h2>
+  <div id="numerosCantados" class="numeros"></div>
 
-    <footer>
-        <p>&copy; 2024 Calvotech. Todos los derechos reservados.</p>
-    </footer>
+  <!-- Capa para efecto pulso -->
+  <div id="flash"></div>
 
-    <!-- Scripts -->
-    <script>
-        function showInfo(service) {
-            var infoText = "";
-            if (service == "desbloqueo") {
-                infoText = "El desbloqueo de netbooks del Gobierno consiste en eliminar restricciones de acceso, permitiendo un uso completo del dispositivo.";
-            } else if (service == "instalacion") {
-                infoText = "La instalación de Windows y Office incluye la configuración del sistema operativo y las aplicaciones de productividad de Microsoft.";
-            } else if (service == "mantenimiento") {
-                infoText = "El mantenimiento de PC incluye la limpieza interna, optimización del sistema y reparación de componentes dañados.";
-            } else if (service == "drivers") {
-                infoText = "Instalamos todos los drivers necesarios para asegurar el correcto funcionamiento del hardware, así como aplicaciones útiles como WinRAR y Java.";
-            }
-
-            document.getElementById("popup-text").innerText = infoText;
-            document.getElementById("info-popup").style.display = "flex";  // Mostrar el popup
-        }
-
-        function closeInfo(event) {
-            if (event.target === document.getElementById("info-popup") || event.target === document.querySelector(".popup-close")) {
-                document.getElementById("info-popup").style.display = "none";  // Cerrar el popup
-            }
-        }
-    </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
