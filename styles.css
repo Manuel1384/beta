@@ -1,115 +1,295 @@
-/* General Styles */
+/* --- Estilos base --- */
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4; /* Light background color */
-}
-
-header {
-    background: linear-gradient(to right, #4e54c8, #8f94fb); /* Gradient background */
-    color: white;
-    text-align: center;
-    padding: 30px 0;
-}
-
-.logo-container {
-    margin-bottom: 15px;
-}
-
-.logo {
-    max-width: 120px; /* Adjust logo size */
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  padding: 20px;
+  text-align: center;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
-    margin: 10px 0;
+  color: #333;
+  margin-bottom: 30px;
 }
 
-.services, .contact {
-    margin: 20px auto;
-    max-width: 600px; /* Center content */
-    padding: 20px;
-    background-color: white; /* White background for sections */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+.controls {
+  margin: 10px auto;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 960px;
+  width: 100%;
 }
 
-.services h2, .contact h2 {
-    text-align: center;
-    color: #333; /* Darker text for headings */
-}
-
-.service-list {
-    list-style-type: none; /* Remove bullet points */
-    padding: 0;
-}
-
-.service-list li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px; /* Space between items */
-    cursor: pointer; /* Pointer cursor on hover */
-}
-
-.service-img {
-    width: 80px; /* Fixed image size */
-    height: auto;
-    border-radius: 5px; /* Rounded corners for images */
-    margin-right: 15px; /* Space between image and text */
-}
-
-.form-group {
-    margin-bottom: 15px; /* Space between form fields */
-}
-
-label {
-    display: block; /* Labels on new lines */
-}
-
-input[type=text],
-input[type=email],
+input,
 textarea {
-    width: calc(100% - 20px); /* Full width minus padding */
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc; /* Light border */
+  padding: 10px;
+  font-size: 16px;
+  width: 180px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: none;
+  box-sizing: border-box;
+}
+
+textarea {
+  height: 60px;
 }
 
 button {
-    width: 100%; /* Full width button */
-    background-color: #4e54c8; /* Button color */
-    color: white;
-    border: none;
-    padding: 10px;
+  padding: 10px 16px;
+  background-color: #2979ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  white-space: nowrap;
 }
 
 button:hover {
-   background-color:#3e43a8 ; /* Darker shade on hover */ 
+  background-color: #1565c0;
 }
 
-/* Popup Styles */
-.popup {
-   display:none ; /* Hidden by default */ 
-   position :fixed ; 
-   top :0 ; 
-   left :0 ; 
-   width :100% ; 
-   height :100% ; 
-   background-color :rgba(0 ,0 ,0 ,0.7) ; /* Semi-transparent background */ 
+#ventas {
+  margin: 25px auto;
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 960px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  max-height: 450px;
+  overflow-y: auto;
 }
 
-.popup-content {
-   position:absolute ; 
-   top :50% ; 
-   left :50% ; 
-   transform :translate(-50% , -50%) ; 
-   background-color:white ; /* Popup background */ 
-   padding :20px ; 
-   border-radius :10px ; /* Rounded corners for popup */ 
+.venta {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
 }
 
-.popup-close {
-   cursor:pointer ; /* Pointer cursor for close button */ 
-   font-size :24px ; 
-   float:right ; 
+.carton {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fafafa;
+  box-shadow: inset 0 0 5px #ccc;
+  transition: box-shadow 0.3s ease;
+  position: relative;
 }
+
+.carton.ganador-carton {
+  border: 3px solid #ff9800;
+  box-shadow: 0 0 15px 3px #ff9800;
+  background-color: #fff7e6;
+}
+
+.numeros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.numeros span {
+  padding: 6px 10px;
+  background: #e0e0e0;
+  border-radius: 6px;
+  min-width: 30px;
+  text-align: center;
+  user-select: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.marcado {
+  background: #4caf50;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 0 5px #4caf50;
+}
+
+.ganador {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #d32f2f;
+  font-weight: bold;
+  user-select: none;
+}
+
+#numerosCantados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
+  max-width: 960px;
+  width: 90%;
+  padding: 10px 0;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+  background: #fff;
+  border-radius: 10px;
+  min-height: 50px;
+}
+
+.cantado {
+  background: #ffb300;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  user-select: none;
+  box-shadow: 0 0 8px #ffb300aa;
+  transition: transform 0.2s ease;
+}
+
+.cantado:hover {
+  transform: scale(1.2);
+  cursor: default;
+}
+
+/* Botón extra para deshacer */
+#undoBtn {
+  background-color: #f44336;
+  margin-left: 10px;
+}
+
+#undoBtn:hover {
+  background-color: #b71c1c;
+}
+
+/* Contenedor input para 6 cartones */
+.cartones-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  max-width: 960px;
+  width: 90%;
+  margin: 0 auto 15px auto;
+  justify-items: center;
+}
+
+.cartones-container textarea {
+  height: 40px;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* --- Efecto pulso para toda la pantalla --- */
+#flash {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.6);
+  opacity: 0;
+  z-index: 9999;
+  animation-fill-mode: forwards;
+}
+
+#flash.active {
+  animation: pulseFlash 1.2s ease-in-out 2;
+}
+
+@keyframes pulseFlash {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  75% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .controls {
+    flex-direction: column;
+    max-width: 300px;
+  }
+  input,
+  textarea {
+    width: 100%;
+  }
+  #ventas {
+    width: 100%;
+    max-height: 350px;
+  }
+  .cartones-container {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+  }
+}
+/* Efecto para toda la página cuando hay ganador */
+#flash {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  background: rgba(255, 215, 0, 0.4);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 9999;
+  animation: flashGlow 1.5s infinite alternate;
+}
+
+#flash.active {
+  opacity: 1;
+}
+
+/* Animación de destello dorado */
+@keyframes flashGlow {
+  0% { background-color: rgba(255, 215, 0, 0.3); }
+  50% { background-color: rgba(255, 255, 224, 0.6); }
+  100% { background-color: rgba(255, 215, 0, 0.3); }
+}
+
+/* Cartón ganador más destacado con glow */
+.ganador-carton {
+  border: 3px solid #ffbf00;
+  box-shadow:
+    0 0 12px 4px #ffd700,
+    0 0 25px 6px #ffeb3b,
+    0 0 40px 8px #fff176;
+  animation: pulseGlow 1.2s ease-in-out infinite alternate;
+  background: #fff9e5;
+  transition: background-color 0.3s ease;
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow:
+      0 0 12px 4px #ffd700,
+      0 0 25px 6px #ffeb3b,
+      0 0 40px 8px #fff176;
+  }
+  100% {
+    box-shadow:
+      0 0 18px 6px #ffea00,
+      0 0 35px 9px #fff59d,
+      0 0 55px 11px #fffde7;
+  }
+}
+
+/* Resto del CSS original */
