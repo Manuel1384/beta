@@ -1,46 +1,385 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Bingo Web Mejorado</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro Escolar</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="favicon-32x32.png" type="image/png">
 </head>
+
 <body>
-  <h1>Bingo Web Mejorado</h1>
 
-  <div class="controls">
-    <input id="nombreCliente" placeholder="Nombre del cliente" />
+<header>
+  <img src="logo.png" class="logo" alt="Logo">
+  <div class="header-title">Registro de Asistencia - E.T.P. Nº1</div>
+</header>
+
+<div class="container">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" data-tab="asistencia">Asistencia</button>
+    <button class="tab" data-tab="modificar">Modificar alumnos</button>
+    <button class="tab" data-tab="estructura">Estructura</button>
   </div>
 
-  <div class="cartones-container">
-    <textarea id="cartonA" placeholder="Cartón A (15 números)"></textarea>
-    <textarea id="cartonB" placeholder="Cartón B (15 números)"></textarea>
-    <textarea id="cartonC" placeholder="Cartón C (15 números)"></textarea>
-    <textarea id="cartonD" placeholder="Cartón D (15 números)"></textarea>
-    <textarea id="cartonE" placeholder="Cartón E (15 números)"></textarea>
-    <textarea id="cartonF" placeholder="Cartón F (15 números)"></textarea>
+  <!-- ASISTENCIA -->
+  <div id="asistencia" class="panel active">
+    <h2>Registro de Asistencia</h2>
+    <button id="btnRecargar" onclick="recargarDatos()">Actualizar datos</button>
+    <div id="listaAsistencia"></div>
   </div>
 
-  <!-- Botón para agregar cartones -->
-  <div class="controls">
-    <button onclick="agregarCartones()">➕ Agregar cartones</button>
+  <!-- MODIFICAR ALUMNOS -->
+  <div id="modificar" class="panel">
+    <h2>Modificar alumnos</h2>
+    <h3>Añadir nuevo alumno</h3>
+
+    <form id="formAlumno" onsubmit="agregarAlumno(event)">
+      <div class="form-group">
+        <input id="nombreAlumno" placeholder="Nombre y apellido" required>
+      </div>
+
+      <div class="form-group">
+        <input id="dniAlumno" type="number" placeholder="DNI" required>
+      </div>
+
+      <div class="form-group">
+        <input id="telefonoAlumno" type="tel" placeholder="Teléfono del tutor (WhatsApp)" required>
+      </div>
+
+      <div class="form-group">
+        <input id="rfidAlumno" placeholder="Clave RFID" required>
+      </div>
+
+      <div class="form-group">
+        <select id="anioAlumno" required></select>
+      </div>
+
+      <div class="form-group">
+        <select id="divisionAlumno" required></select>
+      </div>
+
+      <button type="submit">Agregar alumno</button>
+    </form>
+
+    <h3>Listado de alumnos</h3>
+    <div id="listaAlumnos"></div>
   </div>
 
-  <div class="controls">
-    <input id="numeroCantado" placeholder="🔢 Número cantado" type="number" />
-    <button onclick="cantarNumero()">🔊 Cantar número</button>
-    <button id="undoBtn" onclick="undo()">↩️ Deshacer</button>
-    <button onclick="reiniciarJuego()">🔄 Reiniciar juego</button>
+  <!-- ESTRUCTURA -->
+  <div id="estructura" class="panel">
+    <h2>Estructura de Años y Divisiones</h2>
+    <div class="form-group estructura-top">
+      <input id="nuevoAnio" type="number" min="1" placeholder="Número de Año">
+      <button onclick="agregarAnio()">Agregar Año</button>
+    </div>
+    <div id="listaAnios"></div>
   </div>
 
-  <div id="ventas"></div>
+</div>
 
-  <h2>🎟️ Números cantados:</h2>
-  <div id="numerosCantados" class="numeros"></div>
+<script>
+let estructura = {};
+let alumnos = {};
+let asistencia = {};
 
-  <!-- Capa para efecto pulso -->
-  <div id="flash"></div>
+/* ================= TABS ================= */
 
-  <script src="script.js"></script>
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+    actualizarSelects();
+    renderAlumnos();
+    renderAsistencia();
+  });
+});
+
+/* ================= ESTRUCTURA ================= */
+
+function renderAnios(){
+  const lista = document.getElementById('listaAnios');
+  lista.innerHTML = '';
+
+  Object.keys(estructura).forEach(anio=>{
+    const div = document.createElement('div');
+    div.className = 'year-block';
+
+    div.innerHTML = `
+      <div class="year-header">
+        <div class="year-title">Año ${anio}</div>
+        <div class="button-group">
+          <button onclick="editarDivisiones(${anio})">Editar divisiones</button>
+          <button class="btn-danger" onclick="eliminarAnio(${anio})">Eliminar Año</button>
+        </div>
+      </div>
+
+      <div class="year-controls">
+        <input id="cantDiv-${anio}" type="number" min="1" value="${estructura[anio].length}">
+        <button onclick="cambiarDivisiones(${anio})">Actualizar divisiones</button>
+      </div>
+
+      <div class="division-list">
+        Divisiones: ${estructura[anio].join(', ')}
+      </div>
+    `;
+    lista.appendChild(div);
+  });
+
+  guardar();
+  actualizarSelects();
+}
+
+function agregarAnio(){
+  const anio = document.getElementById('nuevoAnio').value;
+  if(!anio || estructura[anio]) return;
+
+  estructura[anio] = [1,2,3,4,5];
+  alumnos[anio] = {};
+  renderAnios();
+}
+
+function eliminarAnio(anio){
+  if(confirm(`Eliminar el Año ${anio} y todos sus alumnos?`)){
+    delete estructura[anio];
+    delete alumnos[anio];
+    delete asistencia[anio];
+    renderAnios();
+  }
+}
+
+function cambiarDivisiones(anio){
+  const nuevaCant = parseInt(document.getElementById(`cantDiv-${anio}`).value);
+  if(!nuevaCant || nuevaCant <= 0) return;
+
+  const actual = estructura[anio].length;
+
+  if(nuevaCant < actual){
+    estructura[anio] = estructura[anio].slice(0, nuevaCant);
+    for(let d in alumnos[anio]){
+      if(Number(d) > nuevaCant) delete alumnos[anio][d];
+    }
+  } else if(nuevaCant > actual){
+    const max = Math.max(...estructura[anio]);
+    for(let i=1;i<=nuevaCant-actual;i++){
+      estructura[anio].push(max+i);
+    }
+  }
+  renderAnios();
+}
+
+function editarDivisiones(anio){
+  alert(`Año ${anio}: divisiones actuales ${estructura[anio].join(', ')}`);
+}
+
+/* ================= ALUMNOS ================= */
+
+function actualizarSelects(){
+  const anioSel = document.getElementById('anioAlumno');
+  const divSel = document.getElementById('divisionAlumno');
+
+  anioSel.innerHTML = '<option value="">Seleccionar Año</option>';
+  Object.keys(estructura).forEach(anio=>{
+    anioSel.innerHTML += `<option value="${anio}">${anio}</option>`;
+  });
+
+  anioSel.onchange = ()=>{
+    divSel.innerHTML = '<option value="">Seleccionar división</option>';
+    if(estructura[anioSel.value]){
+      estructura[anioSel.value].forEach(d=>{
+        divSel.innerHTML += `<option value="${d}">${d}</option>`;
+      });
+    }
+  };
+}
+
+function agregarAlumno(e){
+  e.preventDefault();
+
+  const nombre = nombreAlumno.value.trim();
+  const dni = dniAlumno.value.trim();
+  const telefono = telefonoAlumno.value.trim();
+  const rfid = rfidAlumno.value.trim();
+  const anio = anioAlumno.value;
+  const div = divisionAlumno.value;
+
+  if(!anio || !div){
+    alert('Selecciona Año y división');
+    return;
+  }
+
+  if(!alumnos[anio]) alumnos[anio] = {};
+  if(!alumnos[anio][div]) alumnos[anio][div] = [];
+
+  alumnos[anio][div].push({nombre,dni,telefono,rfid});
+  e.target.reset();
+  renderAlumnos();
+  guardar();
+}
+
+function renderAlumnos(){
+  const cont = document.getElementById('listaAlumnos');
+  cont.innerHTML = '';
+
+  Object.keys(alumnos).forEach(anio=>{
+    const bloque = document.createElement('div');
+    bloque.innerHTML = `<h4>Año ${anio}</h4>`;
+
+    Object.keys(alumnos[anio]).forEach(div=>{
+      const lista = alumnos[anio][div];
+      if(lista.length){
+        let tabla = `
+        <table>
+          <tr>
+            <th>División</th>
+            <th>Nombre</th>
+            <th>DNI</th>
+            <th>Teléfono</th>
+            <th>RFID</th>
+            <th>Acción</th>
+          </tr>`;
+        lista.forEach((a,i)=>{
+          tabla += `
+          <tr>
+            <td>${div}</td>
+            <td>${a.nombre}</td>
+            <td>${a.dni}</td>
+            <td>${a.telefono}</td>
+            <td>${a.rfid}</td>
+            <td><button class="btn-danger" onclick="eliminarAlumno('${anio}','${div}',${i})">Eliminar</button></td>
+          </tr>`;
+        });
+        tabla += '</table>';
+        bloque.innerHTML += tabla;
+      }
+    });
+    cont.appendChild(bloque);
+  });
+}
+
+function eliminarAlumno(anio,div,i){
+  if(confirm('Eliminar alumno?')){
+    alumnos[anio][div].splice(i,1);
+    renderAlumnos();
+    guardar();
+  }
+}
+
+/* ================= ASISTENCIA ================= */
+
+function renderAsistencia(){
+  const cont = document.getElementById('listaAsistencia');
+  cont.innerHTML = '';
+
+  Object.keys(estructura).forEach(anio=>{
+    const bloque = document.createElement('div');
+    bloque.className = 'year-block';
+    bloque.innerHTML = `
+      <div class="year-header" onclick="toggleDivisiones('${anio}')">
+        <div class="year-title">Año ${anio}</div>
+      </div>
+      <div id="divisiones-${anio}" class="division-list" style="display:none"></div>
+    `;
+    cont.appendChild(bloque);
+  });
+}
+
+function toggleDivisiones(anio){
+  const lista = document.getElementById(`divisiones-${anio}`);
+  lista.style.display = lista.style.display === 'block' ? 'none' : 'block';
+  lista.innerHTML = '';
+
+  estructura[anio].forEach(div=>{
+    const btn = document.createElement('button');
+    btn.textContent = `División ${div}`;
+    btn.onclick = ()=>mostrarAlumnosAsistencia(anio,div);
+    lista.appendChild(btn);
+  });
+}
+
+function mostrarAlumnosAsistencia(anio,div){
+  const lista = document.getElementById(`divisiones-${anio}`);
+  const datos = alumnos[anio]?.[div] || [];
+
+  if(!asistencia[anio]) asistencia[anio] = {};
+  if(!asistencia[anio][div]) asistencia[anio][div] = {};
+
+  let tabla = `
+  <table>
+    <tr>
+      <th>Nombre</th>
+      <th>DNI</th>
+      <th>Teléfono</th>
+      <th>RFID</th>
+      <th>Estado</th>
+      <th>Hora</th>
+      <th>Acción</th>
+    </tr>`;
+
+  datos.forEach(a=>{
+    if(!asistencia[anio][div][a.rfid]){
+      asistencia[anio][div][a.rfid] = {...a,estado:'Fuera',hora:'-'};
+    }
+    const r = asistencia[anio][div][a.rfid];
+    tabla += `
+    <tr>
+      <td>${r.nombre}</td>
+      <td>${r.dni}</td>
+      <td>${r.telefono}</td>
+      <td>${r.rfid}</td>
+      <td>${r.estado}</td>
+      <td>${r.hora}</td>
+      <td>
+        <button onclick="marcarAsistencia('${anio}','${div}','${r.rfid}')">
+          ${r.estado === 'Dentro' ? 'Salida' : 'Entrada'}
+        </button>
+      </td>
+    </tr>`;
+  });
+
+  tabla += '</table>';
+  lista.innerHTML = tabla;
+}
+
+function marcarAsistencia(anio,div,rfid){
+  const r = asistencia[anio][div][rfid];
+  const hora = new Date().toLocaleTimeString();
+  r.estado = r.estado === 'Dentro' ? 'Fuera' : 'Dentro';
+  r.hora = hora;
+  mostrarAlumnosAsistencia(anio,div);
+  guardar();
+}
+
+/* ================= GUARDADO ================= */
+
+function guardar(){
+  fetch('/save_data',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({estructura,alumnos,asistencia})
+  });
+}
+
+function recargarDatos(){
+  fetch('/get_data')
+    .then(r=>r.json())
+    .then(d=>{
+      estructura = d.estructura || {};
+      alumnos = d.alumnos || {};
+      asistencia = d.asistencia || {};
+      renderAnios();
+      renderAlumnos();
+      renderAsistencia();
+    });
+}
+
+recargarDatos();
+</script>
+
 </body>
 </html>
