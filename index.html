@@ -1,385 +1,285 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro Escolar</title>
-
-<link rel="stylesheet" href="style.css">
-<link rel="icon" href="favicon-32x32.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impacto 3D | Impresión 3D Profesional</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
+<!-- HEADER -->
 <header>
-  <img src="logo.png" class="logo" alt="Logo">
-  <div class="header-title">Registro de Asistencia - E.T.P. Nº1</div>
+    <div class="header-container">
+        <div class="logo-section">
+            <img src="logo-impacto3d.png" alt="Impacto 3D" class="logo-img">
+            <div class="logo-text">
+                <h1>Impacto 3D</h1>
+                <p>Impresión 3D profesional y personalizada</p>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button id="cartBtn" class="btn-cart">
+                Carrito
+                <span id="cartCount" class="cart-badge">0</span>
+            </button>
+            <button id="menuBtn" class="btn-menu">Menu</button>
+        </div>
+    </div>
+
+    <!-- MENÚ -->
+    <div id="dropdownMenu" class="dropdown-menu hidden">
+        <button id="loginBtn" class="dropdown-item">Iniciar sesión</button>
+        <button id="registerBtn" class="dropdown-item">Crear cuenta</button>
+        <button id="adminPanelBtn" class="dropdown-item admin-only hidden">
+            Panel de administración
+        </button>
+    </div>
 </header>
 
-<div class="container">
+<!-- HERO -->
+<section class="banner">
+    <div class="banner-content">
+        <h2>Impresión 3D con impacto real</h2>
+        <p>
+            Llaveros, mates, soportes, piezas a medida y más.
+            Producción en Jujuy con envío a todo el país.
+        </p>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab active" data-tab="asistencia">Asistencia</button>
-    <button class="tab" data-tab="modificar">Modificar alumnos</button>
-    <button class="tab" data-tab="estructura">Estructura</button>
-  </div>
-
-  <!-- ASISTENCIA -->
-  <div id="asistencia" class="panel active">
-    <h2>Registro de Asistencia</h2>
-    <button id="btnRecargar" onclick="recargarDatos()">Actualizar datos</button>
-    <div id="listaAsistencia"></div>
-  </div>
-
-  <!-- MODIFICAR ALUMNOS -->
-  <div id="modificar" class="panel">
-    <h2>Modificar alumnos</h2>
-    <h3>Añadir nuevo alumno</h3>
-
-    <form id="formAlumno" onsubmit="agregarAlumno(event)">
-      <div class="form-group">
-        <input id="nombreAlumno" placeholder="Nombre y apellido" required>
-      </div>
-
-      <div class="form-group">
-        <input id="dniAlumno" type="number" placeholder="DNI" required>
-      </div>
-
-      <div class="form-group">
-        <input id="telefonoAlumno" type="tel" placeholder="Teléfono del tutor (WhatsApp)" required>
-      </div>
-
-      <div class="form-group">
-        <input id="rfidAlumno" placeholder="Clave RFID" required>
-      </div>
-
-      <div class="form-group">
-        <select id="anioAlumno" required></select>
-      </div>
-
-      <div class="form-group">
-        <select id="divisionAlumno" required></select>
-      </div>
-
-      <button type="submit">Agregar alumno</button>
-    </form>
-
-    <h3>Listado de alumnos</h3>
-    <div id="listaAlumnos"></div>
-  </div>
-
-  <!-- ESTRUCTURA -->
-  <div id="estructura" class="panel">
-    <h2>Estructura de Años y Divisiones</h2>
-    <div class="form-group estructura-top">
-      <input id="nuevoAnio" type="number" min="1" placeholder="Número de Año">
-      <button onclick="agregarAnio()">Agregar Año</button>
+        <div class="banner-actions">
+            <a href="#catalogo" class="btn-primary banner-btn">Ver catálogo</a>
+            <a href="https://wa.me/549000000000" target="_blank" rel="noopener"
+               class="btn-secondary banner-btn">
+                Contactar por WhatsApp
+            </a>
+        </div>
     </div>
-    <div id="listaAnios"></div>
-  </div>
+</section>
 
+<!-- INFO -->
+<section class="info-grid">
+    <div class="info-card">
+        <h3>Diseños personalizados</h3>
+        <p>Transformamos tu idea o referencia en un producto impreso en 3D.</p>
+    </div>
+    <div class="info-card">
+        <h3>Materiales de calidad</h3>
+        <p>Utilizamos filamentos premium para mejor terminación y resistencia.</p>
+    </div>
+    <div class="info-card">
+        <h3>Atención cercana</h3>
+        <p>Asesoramiento directo para tamaños, colores y tiempos de impresión.</p>
+    </div>
+</section>
+
+<!-- CATÁLOGO -->
+<main class="main-container">
+    <section id="catalogo">
+        <h2 class="section-title">Catálogo de productos</h2>
+        <p class="section-subtitle">
+            Seleccioná un catálogo para ver los productos disponibles.
+        </p>
+
+        <!-- BOTÓN ABRIR CATÁLOGOS -->
+        <button id="openCatalogBtn" class="btn-primary">
+            Ver catálogos
+        </button>
+
+        <!-- MODAL CATÁLOGOS -->
+        <div id="catalogModal" class="modal hidden">
+            <div class="modal-box">
+                <h3>Catálogos</h3>
+
+                <!-- JS inserta las categorías -->
+                <div id="catalogFilters" class="catalog-filters"></div>
+
+                <div class="modal-actions">
+                    <button class="btn-secondary close-modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRODUCTOS -->
+        <div id="catalog" class="catalog-grid"></div>
+    </section>
+</main>
+
+<!-- CÓMO COMPRAR -->
+<section class="steps-section">
+    <h2 class="section-title">Cómo comprar</h2>
+    <div class="steps-grid">
+        <div class="step-card">
+            <span class="step-number">1</span>
+            <h3>Elegí el producto</h3>
+            <p>Navegá el catálogo y seleccioná lo que necesitás.</p>
+        </div>
+        <div class="step-card">
+            <span class="step-number">2</span>
+            <h3>Armá tu carrito</h3>
+            <p>Agregá productos en stock o bajo pedido.</p>
+        </div>
+        <div class="step-card">
+            <span class="step-number">3</span>
+            <h3>Confirmamos</h3>
+            <p>Coordinamos detalles, entrega y tiempos de producción.</p>
+        </div>
+    </div>
+</section>
+
+<!-- LOGIN -->
+<div id="loginModal" class="modal hidden">
+    <div class="modal-box">
+        <h2>Iniciar sesión</h2>
+        <input type="email" id="loginEmail" placeholder="Correo electrónico" class="input-field">
+        <input type="password" id="loginPassword" placeholder="Contraseña" class="input-field">
+        <div class="modal-actions">
+            <button id="loginSubmitBtn" class="btn-primary">Ingresar</button>
+            <button class="btn-secondary close-modal">Cancelar</button>
+        </div>
+    </div>
 </div>
 
-<script>
-let estructura = {};
-let alumnos = {};
-let asistencia = {};
+<!-- CARRITO -->
+<div id="cartModal" class="modal hidden">
+    <div class="modal-box cart-modal">
+        <h2>Carrito</h2>
 
-/* ================= TABS ================= */
+        <div id="cartItems" class="cart-items"></div>
 
-document.querySelectorAll('.tab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById(tab.dataset.tab).classList.add('active');
-    actualizarSelects();
-    renderAlumnos();
-    renderAsistencia();
-  });
-});
-
-/* ================= ESTRUCTURA ================= */
-
-function renderAnios(){
-  const lista = document.getElementById('listaAnios');
-  lista.innerHTML = '';
-
-  Object.keys(estructura).forEach(anio=>{
-    const div = document.createElement('div');
-    div.className = 'year-block';
-
-    div.innerHTML = `
-      <div class="year-header">
-        <div class="year-title">Año ${anio}</div>
-        <div class="button-group">
-          <button onclick="editarDivisiones(${anio})">Editar divisiones</button>
-          <button class="btn-danger" onclick="eliminarAnio(${anio})">Eliminar Año</button>
+        <div class="cart-total">
+            <span>Total:</span>
+            <span id="cartTotal" class="total-amount">0</span>
         </div>
-      </div>
 
-      <div class="year-controls">
-        <input id="cantDiv-${anio}" type="number" min="1" value="${estructura[anio].length}">
-        <button onclick="cambiarDivisiones(${anio})">Actualizar divisiones</button>
-      </div>
+        <div class="modal-actions">
+            <button id="clearCartBtn" class="btn-danger">Vaciar carrito</button>
+            <button id="checkoutBtn" class="btn-primary">Finalizar compra</button>
+        </div>
 
-      <div class="division-list">
-        Divisiones: ${estructura[anio].join(', ')}
-      </div>
-    `;
-    lista.appendChild(div);
-  });
+        <button class="btn-secondary close-modal full-width">Cerrar</button>
+    </div>
+</div>
 
-  guardar();
-  actualizarSelects();
-}
+<!-- WHATSAPP -->
+<a href="https://wa.me/5493883155255"
+   target="_blank"
+   rel="noopener"
+   class="whatsapp-float">
+    WhatsApp
+</a>
 
-function agregarAnio(){
-  const anio = document.getElementById('nuevoAnio').value;
-  if(!anio || estructura[anio]) return;
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>Impacto 3D</h3>
+            <p>Emprendimiento de impresión 3D con base en Jujuy.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Contacto</h4>
+            <p>WhatsApp: +54 9 0000 0000</p>
+            <p>Email: impacto3d@tuempresa.com</p>
+        </div>
+        <div class="footer-col">
+            <h4>Información</h4>
+            <p>Producción bajo pedido y stock limitado.</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        © <span id="year"></span> Impacto 3D
+    </div>
+</footer>
 
-  estructura[anio] = [1,2,3,4,5];
-  alumnos[anio] = {};
-  renderAnios();
-}
-
-function eliminarAnio(anio){
-  if(confirm(`Eliminar el Año ${anio} y todos sus alumnos?`)){
-    delete estructura[anio];
-    delete alumnos[anio];
-    delete asistencia[anio];
-    renderAnios();
-  }
-}
-
-function cambiarDivisiones(anio){
-  const nuevaCant = parseInt(document.getElementById(`cantDiv-${anio}`).value);
-  if(!nuevaCant || nuevaCant <= 0) return;
-
-  const actual = estructura[anio].length;
-
-  if(nuevaCant < actual){
-    estructura[anio] = estructura[anio].slice(0, nuevaCant);
-    for(let d in alumnos[anio]){
-      if(Number(d) > nuevaCant) delete alumnos[anio][d];
-    }
-  } else if(nuevaCant > actual){
-    const max = Math.max(...estructura[anio]);
-    for(let i=1;i<=nuevaCant-actual;i++){
-      estructura[anio].push(max+i);
-    }
-  }
-  renderAnios();
-}
-
-function editarDivisiones(anio){
-  alert(`Año ${anio}: divisiones actuales ${estructura[anio].join(', ')}`);
-}
-
-/* ================= ALUMNOS ================= */
-
-function actualizarSelects(){
-  const anioSel = document.getElementById('anioAlumno');
-  const divSel = document.getElementById('divisionAlumno');
-
-  anioSel.innerHTML = '<option value="">Seleccionar Año</option>';
-  Object.keys(estructura).forEach(anio=>{
-    anioSel.innerHTML += `<option value="${anio}">${anio}</option>`;
-  });
-
-  anioSel.onchange = ()=>{
-    divSel.innerHTML = '<option value="">Seleccionar división</option>';
-    if(estructura[anioSel.value]){
-      estructura[anioSel.value].forEach(d=>{
-        divSel.innerHTML += `<option value="${d}">${d}</option>`;
-      });
-    }
-  };
-}
-
-function agregarAlumno(e){
-  e.preventDefault();
-
-  const nombre = nombreAlumno.value.trim();
-  const dni = dniAlumno.value.trim();
-  const telefono = telefonoAlumno.value.trim();
-  const rfid = rfidAlumno.value.trim();
-  const anio = anioAlumno.value;
-  const div = divisionAlumno.value;
-
-  if(!anio || !div){
-    alert('Selecciona Año y división');
-    return;
-  }
-
-  if(!alumnos[anio]) alumnos[anio] = {};
-  if(!alumnos[anio][div]) alumnos[anio][div] = [];
-
-  alumnos[anio][div].push({nombre,dni,telefono,rfid});
-  e.target.reset();
-  renderAlumnos();
-  guardar();
-}
-
-function renderAlumnos(){
-  const cont = document.getElementById('listaAlumnos');
-  cont.innerHTML = '';
-
-  Object.keys(alumnos).forEach(anio=>{
-    const bloque = document.createElement('div');
-    bloque.innerHTML = `<h4>Año ${anio}</h4>`;
-
-    Object.keys(alumnos[anio]).forEach(div=>{
-      const lista = alumnos[anio][div];
-      if(lista.length){
-        let tabla = `
-        <table>
-          <tr>
-            <th>División</th>
-            <th>Nombre</th>
-            <th>DNI</th>
-            <th>Teléfono</th>
-            <th>RFID</th>
-            <th>Acción</th>
-          </tr>`;
-        lista.forEach((a,i)=>{
-          tabla += `
-          <tr>
-            <td>${div}</td>
-            <td>${a.nombre}</td>
-            <td>${a.dni}</td>
-            <td>${a.telefono}</td>
-            <td>${a.rfid}</td>
-            <td><button class="btn-danger" onclick="eliminarAlumno('${anio}','${div}',${i})">Eliminar</button></td>
-          </tr>`;
-        });
-        tabla += '</table>';
-        bloque.innerHTML += tabla;
-      }
-    });
-    cont.appendChild(bloque);
-  });
-}
-
-function eliminarAlumno(anio,div,i){
-  if(confirm('Eliminar alumno?')){
-    alumnos[anio][div].splice(i,1);
-    renderAlumnos();
-    guardar();
-  }
-}
-
-/* ================= ASISTENCIA ================= */
-
-function renderAsistencia(){
-  const cont = document.getElementById('listaAsistencia');
-  cont.innerHTML = '';
-
-  Object.keys(estructura).forEach(anio=>{
-    const bloque = document.createElement('div');
-    bloque.className = 'year-block';
-    bloque.innerHTML = `
-      <div class="year-header" onclick="toggleDivisiones('${anio}')">
-        <div class="year-title">Año ${anio}</div>
-      </div>
-      <div id="divisiones-${anio}" class="division-list" style="display:none"></div>
-    `;
-    cont.appendChild(bloque);
-  });
-}
-
-function toggleDivisiones(anio){
-  const lista = document.getElementById(`divisiones-${anio}`);
-  lista.style.display = lista.style.display === 'block' ? 'none' : 'block';
-  lista.innerHTML = '';
-
-  estructura[anio].forEach(div=>{
-    const btn = document.createElement('button');
-    btn.textContent = `División ${div}`;
-    btn.onclick = ()=>mostrarAlumnosAsistencia(anio,div);
-    lista.appendChild(btn);
-  });
-}
-
-function mostrarAlumnosAsistencia(anio,div){
-  const lista = document.getElementById(`divisiones-${anio}`);
-  const datos = alumnos[anio]?.[div] || [];
-
-  if(!asistencia[anio]) asistencia[anio] = {};
-  if(!asistencia[anio][div]) asistencia[anio][div] = {};
-
-  let tabla = `
-  <table>
-    <tr>
-      <th>Nombre</th>
-      <th>DNI</th>
-      <th>Teléfono</th>
-      <th>RFID</th>
-      <th>Estado</th>
-      <th>Hora</th>
-      <th>Acción</th>
-    </tr>`;
-
-  datos.forEach(a=>{
-    if(!asistencia[anio][div][a.rfid]){
-      asistencia[anio][div][a.rfid] = {...a,estado:'Fuera',hora:'-'};
-    }
-    const r = asistencia[anio][div][a.rfid];
-    tabla += `
-    <tr>
-      <td>${r.nombre}</td>
-      <td>${r.dni}</td>
-      <td>${r.telefono}</td>
-      <td>${r.rfid}</td>
-      <td>${r.estado}</td>
-      <td>${r.hora}</td>
-      <td>
-        <button onclick="marcarAsistencia('${anio}','${div}','${r.rfid}')">
-          ${r.estado === 'Dentro' ? 'Salida' : 'Entrada'}
-        </button>
-      </td>
-    </tr>`;
-  });
-
-  tabla += '</table>';
-  lista.innerHTML = tabla;
-}
-
-function marcarAsistencia(anio,div,rfid){
-  const r = asistencia[anio][div][rfid];
-  const hora = new Date().toLocaleTimeString();
-  r.estado = r.estado === 'Dentro' ? 'Fuera' : 'Dentro';
-  r.hora = hora;
-  mostrarAlumnosAsistencia(anio,div);
-  guardar();
-}
-
-/* ================= GUARDADO ================= */
-
-function guardar(){
-  fetch('/save_data',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({estructura,alumnos,asistencia})
-  });
-}
-
-function recargarDatos(){
-  fetch('/get_data')
-    .then(r=>r.json())
-    .then(d=>{
-      estructura = d.estructura || {};
-      alumnos = d.alumnos || {};
-      asistencia = d.asistencia || {};
-      renderAnios();
-      renderAlumnos();
-      renderAsistencia();
-    });
-}
-
-recargarDatos();
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+<!-- =========================
+     PANEL DE ADMINISTRACIÓN
+     (VENTANA COMPLETA)
+========================= -->
+<div id="adminModal" class="modal hidden">
+    <div class="modal-box admin-modal-grande">
+
+        <!-- CABECERA -->
+        <div class="admin-header">
+            <h2>Panel de Administración</h2>
+            <button class="close-modal btn-secondary">✖</button>
+        </div>
+
+        <!-- FORMULARIO DE PRODUCTO -->
+        <section class="admin-section">
+            <h3>Agregar / Editar producto</h3>
+
+            <input type="hidden" id="adminEditId">
+
+            <div class="admin-form">
+                <input
+                    type="text"
+                    id="adminNombre"
+                    class="input-field"
+                    placeholder="Nombre del producto"
+                >
+
+                <input
+                    type="number"
+                    id="adminPrecio"
+                    class="input-field"
+                    placeholder="Precio"
+                >
+
+                <input
+                    type="text"
+                    id="adminCategoria"
+                    class="input-field"
+                    placeholder="Categoría (ej: Mates, Accesorios)"
+                >
+
+                <input
+                    type="text"
+                    id="adminImagen"
+                    class="input-field"
+                    placeholder="URL de la imagen"
+                >
+
+                <textarea
+                    id="adminDescripcion"
+                    class="input-field textarea-field"
+                    placeholder="Descripción del producto"
+                ></textarea>
+            </div>
+
+            <div class="admin-actions">
+                <button id="adminGuardarBtn" class="btn-primary">
+                    Guardar producto
+                </button>
+                <button id="adminCancelarBtn" class="btn-secondary hidden">
+                    Cancelar edición
+                </button>
+            </div>
+        </section>
+
+        <!-- LISTADO DE PRODUCTOS -->
+        <section class="admin-section">
+            <h3>Productos cargados</h3>
+
+            <div class="admin-table-header">
+                <span>Producto</span>
+                <span>Categoría</span>
+                <span>Precio</span>
+                <span>Acciones</span>
+            </div>
+
+            <div id="adminProductList" class="admin-product-list">
+                <!-- JS inserta los productos acá -->
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<script src="app.js"></script>
+
 
 </body>
 </html>
